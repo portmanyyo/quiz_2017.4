@@ -11,4 +11,8 @@ router.get('/author', function(req, res, next) {
     res.render('author');
 });
 
+router.get('/Ayuda', function(req, res, next) {
+    res.render('Ayuda');
+});
+
 module.exports = router;
