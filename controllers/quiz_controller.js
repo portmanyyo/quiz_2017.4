@@ -8,7 +8,8 @@ var hechas=[];
 
 
 // GET /quizzes/random_play
-exports.random_play = function (req, res, next) {
+exports.randomPlay = function (req, res, next) {
+
     models.Quiz.findAll()
         .then(function (quizzes) {
             if(quizzes.length > 0){
@@ -37,6 +38,24 @@ exports.random_play = function (req, res, next) {
             }
             return models.Quiz.findById(quizID);
         })
+};
+
+exports.randomcheck = function (req, res, next) {
+    var answer = req.query.answer || "";
+
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+    if(result){
+        contador += 1;
+        resu=contador;
+    }
+     else {
+        var resu=contador;
+        contador=0;
+    }
+    res.render('quizzes/random_result',{
+        score: resu,
+        result: result,
+        answer: answer});
 };
 
 // Autoload el quiz asociado a :quizId
