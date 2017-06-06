@@ -14,11 +14,6 @@ router.get('/author', function(req, res, next) {
 });
 
 
-router.get('/quizzes/randomplay', quizController.random_play);
-router.get('/quizzes/random_play', quizController.random_play);
-router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
-
-
 // Autoload de rutas que usen :quizId
 router.param('quizId', quizController.load);
 
