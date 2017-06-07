@@ -109,10 +109,8 @@ exports.destroy = function (req, res, next) {
     } else {
         console.log('Operación prohibida: El usuario logeado no es el autor del quiz, ni un administrador.');
         res.send(403);
-<<<<<<< HEAD
+
 }
 };
-=======
-    }
-};
->>>>>>> 62838f5c6f89d5887ec62644fe9ea750fff420f9
+
+
