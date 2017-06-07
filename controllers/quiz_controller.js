@@ -3,6 +3,61 @@ var Sequelize = require('sequelize');
 
 var paginate = require('../helpers/paginate').paginate;
 
+var contador =0;
+var hechas=[];
+
+
+// GET /quizzes/random_play
+exports.randomPlay = function (req, res, next) {
+
+    models.Quiz.findAll()
+        .then(function (quizzes) {
+            if(quizzes.length > 0){
+                var random = parseInt(Math.random() * quizzes.length);
+                var quizID = quizzes[random].id;
+                var quiz = quizzes[random];
+                pregunta = quizID.question;
+                for (var i in hechas){
+                    if (hechas[i]===quizID){
+                        res.render('quizzes/random_play',{
+                            score: contador})
+                    } else if (hechas.length === quizzes.length) {
+                        res.render('quizzes/random_nomore', {score: contador})
+                    } else {
+                        hechas.push(quizID);
+                    }
+                }
+                console.log(req.session.score);
+                console.log("Aqui va"+hechas);
+                res.render('quizzes/random_play',{
+                    score: contador,
+                    quiz: quiz
+                })
+            } else {
+                res.render('quizzes/random_nomore', {score: contador})
+            }
+            return models.Quiz.findById(quizID);
+        })
+};
+
+exports.randomcheck = function (req, res, next) {
+    var answer = req.query.answer || "";
+
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+    if(result){
+        contador += 1;
+        resu=contador;
+    }
+     else {
+        var resu=contador;
+        contador=0;
+    }
+    res.render('quizzes/random_result',{
+        score: resu,
+        result: result,
+        answer: answer});
+};
+
 // Autoload el quiz asociado a :quizId
 exports.load = function (req, res, next, quizId) {
 
