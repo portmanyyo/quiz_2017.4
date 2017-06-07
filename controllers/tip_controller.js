@@ -5,7 +5,11 @@ var Sequelize = require('sequelize');
 // Autoload la pista asociado a :tipId
 exports.load = function (req, res, next, tipId) {
 
-    models.Tip.findById(tipId)
+    models.Tip.findById(tipId, {
+        include: [
+            {model: models.User, as: 'Author'}
+        ]
+    })
     .then(function (tip) {
         if (tip) {
             req.tip = tip;
@@ -16,7 +20,7 @@ exports.load = function (req, res, next, tipId) {
     })
     .catch(function (error) {
         next(error);
-    });
+});
 };
 
 
@@ -40,7 +44,8 @@ exports.create = function (req, res, next) {
     var tip = models.Tip.build(
         {
             text: req.body.text,
-            QuizId: req.quiz.id
+            QuizId: req.quiz.id,
+            AuthorId: req.session.user.id
         });
 
     tip.save()
@@ -86,13 +91,21 @@ exports.accept = function (req, res, next) {
 
 // DELETE /quizzes/:quizId/tips/:tipId
 exports.destroy = function (req, res, next) {
+    var isAdmin  = req.session.user.isAdmin;
+    var isAuthor = req.quiz.AuthorId === req.session.user.id;
+    var isAuthorTip = req.tip.AuthorId === req.session.user.id;
 
-    req.tip.destroy()
-    .then(function () {
-        req.flash('success', 'Pista eliminada con éxito.');
-        res.redirect('/quizzes/' + req.params.quizId);
-    })
-    .catch(function (error) {
-        next(error);
-    });
+    if (isAdmin || isAuthor || isAuthorTip) {
+        req.tip.destroy()
+            .then(function () {
+                req.flash('success', 'Pista eliminada con éxito.');
+                res.redirect('/quizzes/' + req.params.quizId);
+            })
+            .catch(function (error) {
+                next(error);
+            });
+    } else {
+        console.log('Operación prohibida: El usuario logeado no es el autor del quiz, ni un administrador.');
+        res.send(403);
+}
 };

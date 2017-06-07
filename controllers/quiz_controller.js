@@ -178,7 +178,6 @@ exports.create = function (req, res, next) {
     var quiz = models.Quiz.build({
         question: req.body.question,
         answer: req.body.answer,
-        AuthorId: authorId
     });
 
     // guarda en DB los campos pregunta y respuesta de quiz
