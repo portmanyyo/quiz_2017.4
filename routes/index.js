@@ -12,14 +12,11 @@ router.get('/', function(req, res, next) {
 router.get('/author', function(req, res, next) {
     res.render('author');
 });
-
-router.get('/Ayuda', function(req, res, next) {
-    res.render('Ayuda');
+// Pagina de ayuda
+router.get('/help', function(req, res, next) {
+    res.render('help');
 });
 
-router.get('/quizzes/randomplay', quizController.random_play);
-router.get('/quizzes/random_play', quizController.random_play);
-router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
 
 
 // Autoload de rutas que usen :quizId
@@ -34,6 +31,9 @@ router.post('/quizzes',                    quizController.create);
 router.get('/quizzes/:quizId(\\d+)/edit',  quizController.edit);
 router.put('/quizzes/:quizId(\\d+)',       quizController.update);
 router.delete('/quizzes/:quizId(\\d+)',    quizController.destroy);
+router.get('/quizzes/randomPlay',          quizController.randomPlay);
+router.get('/quizzes/randomcheck/:quizId(\\d+)',         quizController.radomcheck);
+
 
 router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
