@@ -33,6 +33,9 @@ var Tip = sequelize.import(path.join(__dirname,'tip'));
 // Importar la definicion de la tabla Users de user.js
 var User = sequelize.import(path.join(__dirname,'user'));
 
+//Relación con 1 a N entre User y Tips
+User.hasMany(Tip, {foreignKey: 'AuthorId'});
+Tip.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
 
 // Relaciones entre modelos
 Tip.belongsTo(Quiz);
